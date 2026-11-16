@@ -32,7 +32,7 @@ The mapping follows Guns of 93's own vanilla replacements:
 |---|---|
 | `Base.Pistol` (30 % become revolvers, as in Last Ones Standing) | `SpawnPistol*`, `SpawnRevolver*` |
 | `Base.Revolver` | `SpawnRevolver*` |
-| `Base.Shotgun`, `Base.DoubleBarrelShotgun` | `SpawnSportShotgun*` |
+| `Base.Shotgun`, `Base.DoubleBarrelShotgun`, `Base.JS3T_Shotgun` | `SpawnSportShotgun*` |
 | `Base.ShotgunSawnoff` | `SpawnSBS*` |
 | `Base.HuntingRifle`, `Base.VarmintRifle`, `Base.TrapperCarbine`, `Base.L94_Rifle`, `Base.L92_Carbine`, `Base.JS14_Rifle` | `SpawnSportRifle*` |
 | `Base.AssaultRifle`, `Base.AssaultRifle2`, `Base.MSR7T_Rifle` | `SpawnNFAGun*` (60 %) and `SpawnTacRifle*` (40 %) |

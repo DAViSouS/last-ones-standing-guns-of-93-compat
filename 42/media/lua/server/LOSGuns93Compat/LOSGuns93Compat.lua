@@ -91,6 +91,7 @@ local POOL_OF = {
 
     ["Base.Shotgun"]                   = "SportShotgun",
     ["Base.DoubleBarrelShotgun"]       = "SportShotgun",
+    ["Base.JS3T_Shotgun"]              = "SportShotgun",
     ["Base.ShotgunSawnoff"]            = "SBS",
     ["Base.DoubleBarrelShotgunSawnoff"] = "SBS",
 
