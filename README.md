@@ -53,6 +53,9 @@ either.
   stock use Guns of 93 guns from then on.
 - **Nothing is removed.** Vanilla guns still exist as items; the bridge simply
   stops Last Ones Standing from handing them out.
+- **Gunsmith1993 wins if both are installed.** Last Ones Standing's original
+  `weaponFor` already maps to a Gunsmith gun when Gunsmith1993 is loaded; the
+  bridge notices that answer and leaves it alone rather than replacing it.
 
 ## Ammo and magazines
 
