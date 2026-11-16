@@ -1,0 +1,7 @@
+name=Last Ones Standing - Guns of 93 Compatibility
+id=LOSGuns93Compat
+description=Arms Last Ones Standing's survivors with Guns of 93 weapons instead of the vanilla guns Guns of 93 strips from the world. NPCs keep using Last Ones Standing's own ammo, magazines and reload code. Turns itself off when Last Ones Standing changes version.
+author=Dasfer
+modversion=0.1.0
+require=LastOnesStanding1993,guns93
+versionMin=42.21

@@ -1,0 +1,136 @@
+# Last Ones Standing - Guns of 93 Compatibility
+
+A small bridge between **[Last Ones Standing](https://steamcommunity.com/sharedfiles/filedetails/?id=3830310103)**
+and **[Guns of 93: B42 Test Build](https://steamcommunity.com/sharedfiles/filedetails/?id=3183820077)**.
+
+Last Ones Standing arms its survivors with the vanilla firearms (`Base.Pistol`,
+`Base.Revolver`, `Base.Shotgun`…). Guns of 93 strips those guns out of the
+world's loot and zombie spawns by default, so without a bridge the survivors
+are the only people carrying guns the player can never find. This mod makes
+them draw Guns of 93 weapons instead, with matching magazines and ammo, while
+leaving Last Ones Standing's own ammo, reload and combat code in charge.
+
+This is not a fork of either mod and it does not edit either one. It requires
+both and loads after them.
+
+- **Last Ones Standing:** `0.2.292-dev`
+- **Guns of 93:** B42 Test Build `0.8.2.8f`
+- **Game:** Project Zomboid 42.22.2 (`3d39148846`), `versionMin = 42.21`
+
+## What it changes
+
+Only two exported Last Ones Standing functions are wrapped:
+
+| Function | What the bridge does |
+|---|---|
+| `LOS.TieIns.weaponFor(itemType)` | Maps the vanilla type Last Ones Standing asks for onto one of Guns of 93's own spawn pools, using Guns of 93's rarity weights and `_Alt` caliber variants. |
+| `LOS.TieIns.prepareWeapon(item)` | If a newly made Guns of 93 gun is still on `Safe`, picks a firing mode the NPC can actually use. |
+
+The mapping follows Guns of 93's own vanilla replacements:
+
+| Last Ones Standing asks for | Guns of 93 pool |
+|---|---|
+| `Base.Pistol` (30 % become revolvers, as in Last Ones Standing) | `SpawnPistol*`, `SpawnRevolver*` |
+| `Base.Revolver` | `SpawnRevolver*` |
+| `Base.Shotgun`, `Base.DoubleBarrelShotgun` | `SpawnSportShotgun*` |
+| `Base.ShotgunSawnoff` | `SpawnSBS*` |
+| `Base.HuntingRifle`, `Base.VarmintRifle`, `Base.TrapperCarbine`, `Base.L94_Rifle`, `Base.L92_Carbine`, `Base.JS14_Rifle` | `SpawnSportRifle*` |
+| `Base.AssaultRifle`, `Base.AssaultRifle2`, `Base.MSR7T_Rifle` | `SpawnNFAGun*` (60 %) and `SpawnTacRifle*` (40 %) |
+
+Because the pools are Guns of 93's own, the bridge respects its sandbox
+settings: a caliber the player has turned off will not be handed to an NPC
+either.
+
+## What it deliberately does not do
+
+- **Player weapons are untouched.** Guns of 93's menus, parts, fire modes and
+  sandbox options work exactly as before.
+- **No damage, accuracy or recoil tuning for NPCs.** Last Ones Standing has its
+  own hit and damage model; the bridge does not layer Guns of 93's
+  player-side `GunStatAdjust` on top of it.
+- **No retrofitting.** NPCs already in a save keep the gun they were created
+  with. New survivors, new households, base guards, checkpoint guards and base
+  stock use Guns of 93 guns from then on.
+- **Nothing is removed.** Vanilla guns still exist as items; the bridge simply
+  stops Last Ones Standing from handing them out.
+
+## Ammo and magazines
+
+Nothing extra is needed, and nothing here reimplements reloading:
+
+- Guns of 93 registers its calibers with the engine
+  (`AmmoType.register("guns93:bullets_22", "Base.22Bullets")`), so Last Ones
+  Standing's `roundType` already resolves them.
+- Guns of 93 magazine guns use ordinary `MagazineType` items, including its
+  extended magazines and `_Alt` variants.
+- Revolvers have no magazine, so Last Ones Standing's loose-round reload path
+  applies as normal.
+- Ammo boxes are the same `Base.Bullets9mmBox`, `Base.ShotgunShellsBox`… items,
+  and Last Ones Standing's box-opening code handles them.
+
+## Version guard
+
+Last Ones Standing is updated often, so the bridge compares
+`LastOnesStanding.VERSION` with the version it was written against
+(`TESTED_LOS` in `LOSGuns93Compat.lua`).
+
+| Situation | What happens |
+|---|---|
+| Versions match | The wrappers install and `console.txt` gets one `GUNS93 BRIDGE ENABLED` line. |
+| Versions differ | The wrappers do not install. `console.txt` gets one `GUNS93 BRIDGE DISABLED: Last Ones Standing is X but the bridge was written for Y…` line and both mods run exactly as shipped. |
+| Guns of 93 missing | The mod is not enabled (`require=guns93`). If its item tables somehow fail to load, the bridge removes its wrappers at game start and logs why. |
+
+A disabled bridge breaks nothing: Last Ones Standing falls back to its vanilla
+gun types.
+
+## Install
+
+1. Subscribe to **Last Ones Standing**, **Guns of 93: B42 Test Build** and this mod.
+2. For a manual install, copy this folder to `%USERPROFILE%\Zomboid\mods\` so
+   that `...\Zomboid\mods\<this folder>\mod.info` exists.
+3. Enable all three. Load order is enforced by
+   `require=LastOnesStanding1993,guns93`.
+
+The mod id is `LOSGuns93Compat`. Removing it later is safe: it writes no mod
+data of its own.
+
+## Repository layout
+
+```
+mod.info                                              name, id, requirements
+42/media/lua/server/LOSGuns93Compat/
+    LOSGuns93Compat.lua                               version guard, gun pools, wrappers
+README.md
+CHANGELOG.md
+```
+
+## Rebasing after a Last Ones Standing update
+
+1. Read the new `LOS.TieIns.weaponFor` and `LOS.TieIns.prepareWeapon` in
+   `LOS_TieIns.lua`.
+2. Check the vanilla gun types Last Ones Standing asks for
+   (`LOS_Population.lua`, `LOS_Guard.lua`, `LOS_Stock.lua`,
+   `LOS_Checkpoint.lua`, `LOS_Bodies.lua`) and update `POOL_OF` if any changed.
+3. Confirm Guns of 93 still builds the `Spawn*` pool globals in
+   `Guns93SpawnerItemsTable.lua`.
+4. Set `TESTED_LOS` in `LOSGuns93Compat.lua` to the new
+   `LastOnesStanding.VERSION`, bump `modversion`, and add a CHANGELOG entry.
+5. In game, check `console.txt` for `GUNS93 BRIDGE ENABLED` and no
+   `GUNS93 BRIDGE DISABLED` line.
+
+## Credit
+
+All original code, design and content belong to the authors of Last Ones
+Standing and Guns of 93. This repository only contains the bridge.
+
+## License
+
+No license is granted here for either mod's code. The bridge changes are
+offered for the authors to take, adapt or ignore.
+
+## Disclaimer
+
+This is AI slop. Yes, even this disclaimer. The AI was pointed at two mods that
+were never designed to talk to each other and only moderately kept in check by
+a human, so read the diff before you trust it. Use at your own risk — you were
+warned.
