@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.3.0 — 17 November 2026
+
+Wider draw for sawn-offs and assault rifles. Still **Last Ones Standing `1.0`** and
+**Guns of 93: B42 Test Build `0.8.2.8f`**.
+
+### Changed
+
+- **Sawn-off rifles.** `Base.ShotgunSawnoff` and
+  `Base.DoubleBarrelShotgunSawnoff` now split 75 % `SBS` / 25 %
+  `SpawnSawedRifle*` instead of always being a sawn-off shotgun.
+  `SawedRifle` is Guns of 93's rifle counterpart: a Remington 700/788 or M24
+  with the stock and barrel cut down, `WeaponReloadType = boltactionnomag`, a
+  5-round internal magazine and 32 units of range against the full .223
+  Remington 700's 45. Last Ones Standing only asks for a sawn-off as a raider's
+  backup gun (15 % of a raider's gun rolls in `LOS_Population`), so the sawn
+  rifle lands where a sawn-off would have.
+- **Military long guns.** `Base.AssaultRifle`, `Base.AssaultRifle2` and
+  `Base.MSR7T_Rifle` now split 54 % `SpawnNFAGun*` / 36 % `SpawnTacRifle*` /
+  10 % `SpawnMilitaryLongGun*`. The 60/40 mix Last Ones Standing had is kept for
+  the non-military share; one in ten becomes an M16A2, M590 or M870, and only
+  rarely an M249, M723, M727, M733 or M60, because those sit in the pool's rare
+  and very-rare lists. Guns of 93's own per-caliber ammo-distribution options
+  (and `Guns93AutoDistro`) still decide whether the pool has anything in it at
+  all.
+
+### Not used
+
+- Guns of 93's police, SWAT, store, crime, bug-out and military sniper pools
+  stay out of the mapping.
+
+### Tuning
+
+- `MILITARY_SHARE` (10) and `SAWN_RIFLE_SHARE` (25) at the top of
+  `LOSGuns93Compat.lua` are the only two numbers behind the new splits.
+
 ## 0.2.0 — 17 November 2026
 
 Rebased onto **Last Ones Standing `1.0`** (the 16 November update). Guns of 93:

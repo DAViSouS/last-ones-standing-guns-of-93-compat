@@ -96,8 +96,8 @@ local POOL_OF = {
     ["Base.Shotgun"]                   = "SportShotgun",
     ["Base.DoubleBarrelShotgun"]       = "SportShotgun",
     ["Base.JS3T_Shotgun"]              = "SportShotgun",
-    ["Base.ShotgunSawnoff"]            = "SBS",
-    ["Base.DoubleBarrelShotgunSawnoff"] = "SBS",
+    ["Base.ShotgunSawnoff"]            = "SawnMix",
+    ["Base.DoubleBarrelShotgunSawnoff"] = "SawnMix",
 
     ["Base.HuntingRifle"]              = "SportRifle",
     ["Base.VarmintRifle"]              = "SportRifle",
@@ -107,7 +107,9 @@ local POOL_OF = {
     ["Base.JS14_Rifle"]                = "SportRifle",
 
     -- Guns of 93 sends vanilla assault rifles mostly to its "no formal army"
-    -- pool (SMGs and the like) and the rest to its tactical rifle pool.
+    -- pool (SMGs and the like) and the rest to its tactical rifle pool.  A
+    -- small share goes to its military pool instead, so the occasional M16A2
+    -- or M249 turns up; that pool's own rarity tiers keep the M60 rare.
     ["Base.AssaultRifle"]              = "RifleMix",
     ["Base.AssaultRifle2"]             = "RifleMix",
     ["Base.MSR7T_Rifle"]               = "RifleMix",
@@ -116,7 +118,15 @@ local POOL_OF = {
 -- Last Ones Standing arms 30 % of its "pistol" people with a revolver; keep
 -- that mix now that the type comes from Guns of 93.
 local REVOLVER_SHARE = 30
+-- A share of the sawn-off shotgun requests becomes a sawn-off rifle (Guns of
+-- 93's SawedRifle pool): the same chopped-stock idea, still a two-handed rifle
+-- on a rifle caliber, given to the same raiders Last Ones Standing arms with a
+-- sawn-off.
+local SAWN_RIFLE_SHARE = 25
 local NFA_SHARE = 60
+-- A share of the assault-rifle requests goes to the military pool.  Low on
+-- purpose: that pool holds M249, M723/M727/M733 and M60 as well as M16A2.
+local MILITARY_SHARE = 10
 local ALT_SHARE = 22          -- Guns of 93's own chance of an _Alt caliber
 local LOOKS = 5               -- candidates tried per pool before giving up
 
@@ -177,7 +187,13 @@ local function pickFor(pool)
     if pool == "PistolMix" then
         pool = (ZombRand(100) < REVOLVER_SHARE) and "Revolver" or "Pistol"
     elseif pool == "RifleMix" then
-        pool = (ZombRand(100) < NFA_SHARE) and "NFAGun" or "TacRifle"
+        if ZombRand(100) < MILITARY_SHARE then
+            pool = "MilitaryLongGun"
+        else
+            pool = (ZombRand(100) < NFA_SHARE) and "NFAGun" or "TacRifle"
+        end
+    elseif pool == "SawnMix" then
+        pool = (ZombRand(100) < SAWN_RIFLE_SHARE) and "SawedRifle" or "SBS"
     end
     return pickFromPool(pool)
 end

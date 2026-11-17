@@ -33,9 +33,27 @@ The mapping follows Guns of 93's own vanilla replacements:
 | `Base.Pistol` (30 % become revolvers, as in Last Ones Standing) | `SpawnPistol*`, `SpawnRevolver*` |
 | `Base.Revolver` | `SpawnRevolver*` |
 | `Base.Shotgun`, `Base.DoubleBarrelShotgun`, `Base.JS3T_Shotgun` | `SpawnSportShotgun*` |
-| `Base.ShotgunSawnoff` | `SpawnSBS*` |
+| `Base.ShotgunSawnoff`, `Base.DoubleBarrelShotgunSawnoff` | `SpawnSBS*` (75 %) and `SpawnSawedRifle*` (25 %) |
 | `Base.HuntingRifle`, `Base.VarmintRifle`, `Base.TrapperCarbine`, `Base.L94_Rifle`, `Base.L92_Carbine`, `Base.JS14_Rifle` | `SpawnSportRifle*` |
-| `Base.AssaultRifle`, `Base.AssaultRifle2`, `Base.MSR7T_Rifle` | `SpawnNFAGun*` (60 %) and `SpawnTacRifle*` (40 %) |
+| `Base.AssaultRifle`, `Base.AssaultRifle2`, `Base.MSR7T_Rifle` | `SpawnNFAGun*` (54 %), `SpawnTacRifle*` (36 %) and `SpawnMilitaryLongGun*` (10 %) |
+
+Two deliberate widenings beyond the plain vanilla equivalents:
+
+- **Sawn-off rifles.** Guns of 93's `SawedRifle` pool holds rifles with the
+  stock and barrel chopped — a Remington 700/788 or M24 shortened, still
+  two-handed, still on a rifle caliber, 5-round internal magazine and roughly a
+  third less range. Last Ones Standing only asks for a sawn-off as a raider's
+  backup gun, so one in four of those becomes a sawn-off rifle instead of a
+  sawn-off shotgun.
+- **Military long guns.** One in ten assault-rifle requests draws from
+  `MilitaryLongGun`, so M16A2, M590/M870, and occasionally M249, M723/M727/M733
+  or M60, turn up on survivors. That pool's own rarity tiers still apply: the
+  machine guns sit in its rare and very-rare lists, so they stay uncommon even
+  inside the 10 %.
+
+Not used at all: Guns of 93's police, SWAT, store, crime, bug-out and military
+sniper pools. Those are loot tables for places and roles Last Ones Standing does
+not model, and its NPCs are never handed those guns.
 
 Because the pools are Guns of 93's own, the bridge respects its sandbox
 settings: a caliber the player has turned off will not be handed to an NPC
