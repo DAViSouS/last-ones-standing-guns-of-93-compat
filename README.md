@@ -13,7 +13,7 @@ leaving Last Ones Standing's own ammo, reload and combat code in charge.
 This is not a fork of either mod and it does not edit either one. It requires
 both and loads after them.
 
-- **Last Ones Standing:** `0.2.292-dev`
+- **Last Ones Standing:** `1.0`
 - **Guns of 93:** B42 Test Build `0.8.2.8f`
 - **Game:** Project Zomboid 42.22.2 (`3d39148846`), `versionMin = 42.21`
 
@@ -69,7 +69,13 @@ Nothing extra is needed, and nothing here reimplements reloading:
 - Revolvers have no magazine, so Last Ones Standing's loose-round reload path
   applies as normal.
 - Ammo boxes are the same `Base.Bullets9mmBox`, `Base.ShotgunShellsBox`… items,
-  and Last Ones Standing's box-opening code handles them.
+  and Last Ones Standing's box-opening code handles them. In `1.0` that code
+  finds a box by the recipes it can be used in rather than by its display
+  category, and checks the craft surface and light before starting, so Guns of
+  93's boxes and rounds go through the same path.
+- `1.0` also fills an NPC's empty magazine from loose rounds, ejecting it to do
+  so, and restocks from magazines carried in its pack. Guns of 93 guns use that
+  path unchanged; the bridge adds nothing on top of it.
 
 ## Version guard
 
@@ -97,6 +103,28 @@ gun types.
 The mod id is `LOSGuns93Compat`. Removing it later is safe: it writes no mod
 data of its own.
 
+## Testing on Last Ones Standing 1.0
+
+Use a **new save**. NPCs already in a world keep the gun they were created with,
+and a save that was using Gunsmith1993 has records naming Gunsmith items.
+
+1. Enable **Guns of 93** and this mod, and **disable Gunsmith1993** while you
+   test. Last Ones Standing's own `weaponFor` answers first when Gunsmith1993 is
+   loaded, and this bridge deliberately defers to it wherever it gives an
+   answer: with both on you would see Gunsmith guns, not Guns of 93 guns.
+2. Start a new world. Leave Guns of 93's `VanillaGuns` option off (its default);
+   vanilla guns stay as items either way.
+3. `console.txt` should have one `GUNS93 BRIDGE ENABLED: … (Last Ones Standing 1.0)`
+   line and no `GUNS93 BRIDGE DISABLED` line.
+4. Last Ones Standing logs `LOOKS npc=… draws its <item>` when a survivor arms
+   itself, and this bridge logs `GUNS93 BRIDGE: put an NPC's <item> on <mode>`
+   the first time it has to take each type off `Safe`. The item should be a Guns
+   of 93 type (`Base.M9`, `Base.M1911_Alt`…), never `Base.Pistol`.
+5. Watch a survivor with a magazine gun reload. `1.0` fills an empty magazine
+   from loose rounds and restocks from magazines in the pack; the bridge does
+   not take part, so a gun that never reloads is a Last Ones Standing issue, not
+   a bridge one.
+
 ## Repository layout
 
 ```
@@ -110,7 +138,8 @@ CHANGELOG.md
 ## Rebasing after a Last Ones Standing update
 
 1. Read the new `LOS.TieIns.weaponFor` and `LOS.TieIns.prepareWeapon` in
-   `LOS_TieIns.lua`.
+   `LOS_TieIns.lua`. (In `1.0` this file is unchanged from `0.2.292-dev`; the
+   bridge seam is the same.)
 2. Check the vanilla gun types Last Ones Standing asks for
    (`LOS_Population.lua`, `LOS_Guard.lua`, `LOS_Stock.lua`,
    `LOS_Checkpoint.lua`, `LOS_Bodies.lua`) and update `POOL_OF` if any changed.

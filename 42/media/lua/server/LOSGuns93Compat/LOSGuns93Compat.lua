@@ -26,7 +26,11 @@ local C = {}
 LOSGuns93Compat = C
 
 -- Upstream LastOnesStanding.VERSION this bridge was written against.
-C.TESTED_LOS = "0.2.292-dev"
+-- 1.0 leaves LOS_TieIns.lua untouched (the only file this bridge wraps), so the
+-- seam is the same one 0.2.292-dev had.  1.0's new magazine filling, magazine
+-- ejection and ammo-box recipe discovery all live in LOS_Ammo and are left to
+-- Last Ones Standing: they run for Guns of 93 guns like for any other gun.
+C.TESTED_LOS = "1.0"
 
 
 ---------------------------------------------------------------------------

@@ -1,5 +1,56 @@
 # Changelog
 
+## 0.2.0 — 17 November 2026
+
+Rebased onto **Last Ones Standing `1.0`** (the 16 November update). Guns of 93:
+B42 Test Build `0.8.2.8f` is unchanged.
+
+### Rebase result
+
+- **The bridge seam did not move.** `LOS_TieIns.lua` — the only upstream file
+  this mod wraps — is byte-identical to `0.2.292-dev`, and `weaponFor` /
+  `prepareWeapon` still take the same single argument. `TESTED_LOS` is now
+  `"1.0"`; `POOL_OF` needed no change.
+- **The requests did not change.** `1.0` still asks for `Base.Pistol`,
+  `Base.Revolver`, `Base.Shotgun`, `Base.ShotgunSawnoff`, `Base.HuntingRifle`
+  and `Base.AssaultRifle` (`LOS_Population`, `LOS_Guard`, `LOS_Stock`,
+  `LOS_Checkpoint`, `LOS_Bodies`), so every type an NPC can be given is already
+  in the pool map.
+
+### Checked against 1.0's new gun code
+
+- **Magazine filling and ejection** (`LOS_Ammo`): `1.0` fills an NPC's empty
+  magazine from loose rounds, ejecting the magazine to do it, and restocks from
+  magazines carried in its pack. Guns of 93 magazine guns use ordinary
+  `MagazineType` items, so this path applies to them unchanged. The bridge adds
+  nothing.
+- **Ammo boxes** (`LOS_Ammo`): box discovery now goes by the recipes an item can
+  be used in, rather than `DisplayCategory == "Ammo"`, and checks the craft
+  surface and light before starting. Guns of 93's boxes and rounds work through
+  it; nothing to bridge.
+- **NPC loadout** (`LOS_Loadout`): a fresh gun now gets a loaded magazine
+  (`loadFresh`, then a magazine at full or partial rounds). Guns of 93 magazine
+  types are `Base.*` items, so this works as-is.
+- **Saved guns** (`LOS_Items`): `restoreGun` is unchanged in `1.0` (the file's
+  only edit is a cosmetic expression in `colorOf`). A record stores the item
+  type plus `magType` and `clip`, so a Guns of 93 gun written to the save comes
+  back as the same item type with its own magazine; nothing to reconcile.
+- **Checkpoint guards** (`LOS_Guard`): still armed through `TieIns.weaponFor`,
+  now with a magazine supplied the same way.
+- **Stamina** (`LOS_Stamina`): new in `1.0`, and it can make an NPC refuse a
+  melee swing. It does not touch firearms or `TieIns`.
+- **Version guard**: `1.0` passes; any other version still disables the bridge
+  with one `GUNS93 BRIDGE DISABLED` line.
+
+### Testing notes
+
+- Use a new save: existing NPCs keep the gun they were created with.
+- Disable **Gunsmith1993** while testing. Its own `weaponFor` answer wins
+  wherever it gives one and this bridge defers to it, so with both loaded you
+  see Gunsmith guns, not Guns of 93 guns.
+- The bridge takes a gun off `Safe` only for types it actually hands out; the
+  log line is written once per type.
+
 ## 0.1.0 — 16 November 2026
 
 First release. A standalone bridge for **Last Ones Standing** `0.2.292-dev`
