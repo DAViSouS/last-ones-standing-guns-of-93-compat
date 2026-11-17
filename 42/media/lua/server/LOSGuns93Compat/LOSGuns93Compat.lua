@@ -130,6 +130,20 @@ local MILITARY_SHARE = 10
 local ALT_SHARE = 22          -- Guns of 93's own chance of an _Alt caliber
 local LOOKS = 5               -- candidates tried per pool before giving up
 
+-- Where to look when a pool is empty because the player's Guns of 93 options
+-- removed everything from it.  Ordered from closest match to least.
+local FALLBACK = {
+    Pistol          = { "Revolver", "SportRifle", "SportShotgun" },
+    Revolver        = { "Pistol", "SportRifle" },
+    SportShotgun    = { "SBS", "SportRifle", "Pistol" },
+    SBS             = { "SawedRifle", "SportShotgun", "Pistol" },
+    SawedRifle      = { "SBS", "SportRifle", "Pistol" },
+    SportRifle      = { "SportShotgun", "Pistol", "Revolver" },
+    NFAGun          = { "TacRifle", "SportRifle", "Pistol" },
+    TacRifle        = { "NFAGun", "SportRifle", "Pistol" },
+    MilitaryLongGun = { "NFAGun", "TacRifle", "SportRifle" },
+}
+
 local existsCache = {}
 
 local function itemExists(ft)
@@ -195,7 +209,16 @@ local function pickFor(pool)
     elseif pool == "SawnMix" then
         pool = (ZombRand(100) < SAWN_RIFLE_SHARE) and "SawedRifle" or "SBS"
     end
-    return pickFromPool(pool)
+    local ft = pickFromPool(pool)
+    if ft then return ft end
+    -- The player's Guns of 93 options can empty a whole pool.  Try a related
+    -- one before giving up: the answer must not be a vanilla gun, because a
+    -- Guns of 93 world no longer spawns those for the player to find.
+    for _, alt in ipairs(FALLBACK[pool] or {}) do
+        ft = pickFromPool(alt)
+        if ft then return ft end
+    end
+    return nil
 end
 
 

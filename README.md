@@ -55,6 +55,12 @@ Not used at all: Guns of 93's police, SWAT, store, crime, bug-out and military
 sniper pools. Those are loot tables for places and roles Last Ones Standing does
 not model, and its NPCs are never handed those guns.
 
+If one of the pools used here is empty — a player can switch off a whole caliber
+in Guns of 93's sandbox options, and that empties its pool — the request falls
+back to a related pool (`MilitaryLongGun` → `NFAGun` → `TacRifle` →
+`SportRifle`, and so on) instead of handing out a vanilla gun that a Guns of 93
+world no longer spawns.
+
 Because the pools are Guns of 93's own, the bridge respects its sandbox
 settings: a caliber the player has turned off will not be handed to an NPC
 either.

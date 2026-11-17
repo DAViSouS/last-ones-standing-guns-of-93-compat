@@ -25,6 +25,14 @@ Wider draw for sawn-offs and assault rifles. Still **Last Ones Standing `1.0`** 
   (and `Guns93AutoDistro`) still decide whether the pool has anything in it at
   all.
 
+### Fixed while widening
+
+- **Empty pools no longer hand out vanilla guns.** Guns of 93's per-caliber
+  sandbox options can empty a pool completely; the bridge now falls back to a
+  related pool (`MilitaryLongGun` → `NFAGun` → `TacRifle` → `SportRifle`, and so
+  on) instead of returning the vanilla type, which the player would never find
+  in a Guns of 93 world.
+
 ### Not used
 
 - Guns of 93's police, SWAT, store, crime, bug-out and military sniper pools
