@@ -1,9 +1,23 @@
 # Changelog
 
+## 0.3.1 — 17 November 2026
+
+Packaging fix. **The bridge did not appear in the Mods screen at all**, so it
+could not be enabled.
+
+### Fixed
+
+- **`mod.info` was in the mod's root folder.** Project Zomboid 42 reads
+  `mod.info` from the build folder, so the bridge now ships
+  `42/mod.info` (the same layout Last Ones Standing, Hands-On Interactions
+  Carry & Place Fix and Two-Handed Offhand Carry use). A root-level `mod.info`
+  is the build 41 layout and is ignored, which is why the mod was missing from
+  the list while those three showed up.
+
 ## 0.3.0 — 17 November 2026
 
 Wider draw for sawn-offs and assault rifles. Still **Last Ones Standing `1.0`** and
-**Guns of 93: B42 Test Build `0.8.2.8f`**.
+**Guns of 93: B42 Test Build `0.8.2.3A`**.
 
 ### Changed
 
@@ -46,7 +60,7 @@ Wider draw for sawn-offs and assault rifles. Still **Last Ones Standing `1.0`** 
 ## 0.2.0 — 17 November 2026
 
 Rebased onto **Last Ones Standing `1.0`** (the 16 November update). Guns of 93:
-B42 Test Build `0.8.2.8f` is unchanged.
+B42 Test Build `0.8.2.3A` is unchanged.
 
 ### Rebase result
 
@@ -97,7 +111,7 @@ B42 Test Build `0.8.2.8f` is unchanged.
 ## 0.1.0 — 16 November 2026
 
 First release. A standalone bridge for **Last Ones Standing** `0.2.292-dev`
-and **Guns of 93: B42 Test Build** `0.8.2.8f`. Neither mod is edited.
+and **Guns of 93: B42 Test Build** `0.8.2.3A`. Neither mod is edited.
 
 ### What it fixes
 

@@ -14,7 +14,7 @@ This is not a fork of either mod and it does not edit either one. It requires
 both and loads after them.
 
 - **Last Ones Standing:** `1.0`
-- **Guns of 93:** B42 Test Build `0.8.2.8f`
+- **Guns of 93:** B42 Test Build `0.8.2.3A`
 - **Game:** Project Zomboid 42.22.2 (`3d39148846`), `versionMin = 42.21`
 
 ## What it changes
@@ -118,11 +118,22 @@ gun types.
 
 ## Install
 
-1. Subscribe to **Last Ones Standing**, **Guns of 93: B42 Test Build** and this mod.
-2. For a manual install, copy this folder to `%USERPROFILE%\Zomboid\mods\` so
-   that `...\Zomboid\mods\<this folder>\mod.info` exists.
-3. Enable all three. Load order is enforced by
+This mod is a manual folder, not a Workshop item:
+
+1. Copy this folder to `%USERPROFILE%\Zomboid\mods\` so that
+   `...\Zomboid\mods\LOSGuns93Compat\42\mod.info` exists. Project Zomboid 42
+   reads `mod.info` from the build folder (`42/`), not from the mod's root, so a
+   root-level `mod.info` makes the mod invisible in the Mods screen.
+2. In the main menu open **Mods**. The bridge appears as *Last Ones Standing -
+   Guns of 93 Compatibility*; enable it, **Last Ones Standing** and **Guns of
+   93: B42 Test Build** together. Load order is enforced by
    `require=LastOnesStanding1993,guns93`.
+3. Because of that requirement the bridge cannot be enabled while Guns of 93 is
+   not enabled — Project Zomboid treats it as an unresolved dependency.
+
+Enabling the pair in a save that already has its own mod list means starting a
+new save: a save's `mods.txt` is fixed when it is created, and a save that never
+had Guns of 93 has no Guns of 93 gun items to restore.
 
 The mod id is `LOSGuns93Compat`. Removing it later is safe: it writes no mod
 data of its own.
@@ -152,7 +163,7 @@ and a save that was using Gunsmith1993 has records naming Gunsmith items.
 ## Repository layout
 
 ```
-mod.info                                              name, id, requirements
+42/mod.info                                           name, id, requirements
 42/media/lua/server/LOSGuns93Compat/
     LOSGuns93Compat.lua                               version guard, gun pools, wrappers
 README.md
